@@ -17,6 +17,13 @@ from django.db.models import *
 from rest_framework import status
 import io, csv, pandas as pd
 
+#new
+from django.views.decorators.csrf import ensure_csrf_cookie
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_protect
+from django.utils.decorators import method_decorator
+
+
 @api_view(['GET'])
 def api_root(request, format = None):
    return Response({
@@ -36,6 +43,9 @@ def api_root(request, format = None):
       'upload_tenure_csv_file': reverse('upload-tenure-file-csv', request = request, format = format)
    })
 
+class UserListView(generics.ListAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
 #projected affected person
 class ProjectAffectedPersonList(generics.ListCreateAPIView):
     authentication_classes = [SessionAuthentication, BasicAuthentication]
